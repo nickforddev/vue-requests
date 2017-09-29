@@ -4,11 +4,14 @@
     <button @click="test('put')">Put</button>
     <button @click="test('post')">Post</button>
     <button @click="test('delete')">Delete</button>
+
+    <div>
+      <button @click="jsfiddle">Get JSFiddle</button>
+    </div>
   </div>
 </template>
 
 <script>
-
 export default {
   name: 'app',
   methods: {
@@ -22,6 +25,10 @@ export default {
         .catch(err => {
           console.warn(err)
         })
+    },
+    async jsfiddle() {
+      const response = await this.$request('http://google.com/')
+      console.log({response})
     }
   }
 }

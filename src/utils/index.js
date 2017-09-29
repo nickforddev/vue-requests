@@ -1,6 +1,10 @@
 import _ from 'lodash'
 
-export function validateArgs (options) {
+function isDef (item) {
+  return item !== undefined
+}
+
+export function validateArgs (options = {}) {
   const functions = {
     before: options.before,
     timeout: options.timeout
@@ -11,30 +15,41 @@ export function validateArgs (options) {
   const objects = {
     headers: options.headers
   }
+  const numbers = {
+    timeout_duration: options.timeout_duration
+  }
 
   for (let key in functions) {
     const type = typeof functions[key]
-    if (type !== 'function') {
+    if (isDef(functions[key]) && type !== 'function') {
       throw new TypeError(`Expected parameter "${key}" to be a function, received ${type}`)
     }
   }
 
   for (let key in strings) {
     const type = typeof strings[key]
-    if (type !== 'string') {
+    if (isDef(strings[key]) && type !== 'string') {
       throw new TypeError(`Expected parameter "${key}" to be a string, received ${type}`)
     }
   }
 
   for (let key in objects) {
     const type = typeof objects[key]
-    if (type !== 'object') {
+    if (isDef(objects[key]) && type !== 'object') {
       throw new TypeError(`Expected parameter "${key}" to be an object, received ${type}`)
+    }
+  }
+
+  for (let key in numbers) {
+    const type = typeof numbers[key]
+    if (isDef(numbers[key]) && type !== 'number') {
+      throw new TypeError(`Expected parameter "${key}" to be an number, received ${type}`)
     }
   }
 }
 
 export async function handleXHRErrors (response) {
+  console.log({response})
   const text = await response.text()
   try {
     const json = JSON.parse(text)
