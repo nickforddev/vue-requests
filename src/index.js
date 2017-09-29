@@ -5,4 +5,3 @@ export default class VueRequest {
     Vue.mixin(makeMixin(Vue, options))
   }
 }
-

@@ -1,20 +1,13 @@
 
 import _ from 'lodash'
 import 'whatwg-fetch'
+import { handleXHRErrors, processHeaders } from './utils'
 
-// return error data from request
-
-const handleXHRErrors = async (response) => {
-  const text = await response.text()
-  try {
-    const json = JSON.parse(text)
-    if (!response.ok) {
-      return Promise.reject(json)
-    } else {
-      return json
-    }
-  } catch (error) {
-    return Promise.reject(text)
+const defaults = () => {
+  return {
+    method: 'GET',
+    body: undefined,
+    headers: {}
   }
 }
 
@@ -22,33 +15,26 @@ const handleXHRErrors = async (response) => {
 
 export default function Request(
   url = '',
-  {
-    method = 'GET',
-    body,
-    headers = {}
-  } = {},
+  _options = {},
   config = {}
 ) {
-  if (body) body = JSON.stringify(body)
+  const options = _.merge({}, defaults(), _options)
+  const body = options.body
+    ? JSON.stringify(body)
+    : undefined
+
+  const method = options.method
+  const headers = processHeaders(config.headers, options.headers)
+
   if (!/^https?:\/\//i.test(url)) {
     url = config.root + url
-  }
-  headers = _.pickBy(
-    _.merge({}, config.headers, headers),
-    _.identity
-  )
-
-  for (let key in headers) {
-    headers[key] = headers[key]()
   }
 
   const race = Promise.race([
     fetch(url, {
       method,
       body,
-      headers: new Headers(
-        headers
-      )
+      headers
     })
     .then(handleXHRErrors),
     new Promise((resolve, reject) => {

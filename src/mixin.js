@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import Request from './request'
+import { validateArgs } from './utils'
 
 const defaults = {
   timeout_duration: 20000,
@@ -8,7 +9,12 @@ const defaults = {
   root: ''
 }
 
-const init = (vm, _config) => {
+const init = async (vm, _config) => {
+  try {
+    validateArgs(_config)
+  } catch (error) {
+    console.warn(error)
+  }
   const config = _.merge({}, defaults, _config)
   vm.$request = async (url, options) => {
     if (typeof config.before === 'function') {

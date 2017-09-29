@@ -11,7 +11,8 @@ Vue.use(VueRequest, {
   headers: {
     Access() {
       return token
-    }
+    },
+    Refresh: 'test_refresh_token'
   },
   before() {
     console.log('fire this before')
