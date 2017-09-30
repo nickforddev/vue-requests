@@ -4,22 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/nickforddesign/vue-req/badge.svg?branch=master)](https://coveralls.io/github/nickforddesign/vue-req?branch=master)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-> A Vue.js project
-
-## Build Setup
-
-``` bash
-# install dependencies
-npm install
-
-# serve demo at localhost:8080
-npm start
-
-# run tests with jest
-npm test
-```
-
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+> A modern fetch plugin for Vue.js with easy config config and hooks
 
 ## Installation
 
@@ -68,6 +53,8 @@ Here's an example of a before hook checking for expired tokens and attempting to
 
 ```js
 import moment from 'moment'
+import store from './store'
+
 const token = {
   id: '1234567890',
   expires: '2017-09-30T01:44:19.273Z'
@@ -75,7 +62,7 @@ const token = {
 const options = {
   async before() {
     if (moment.utc(token.expires) >= moment.utc()) {
-      this.$store.dispatch('refresh_tokens')
+      store.dispatch('refresh_tokens')
     }
   }
 }
@@ -106,3 +93,18 @@ const options = {
 
 Vue.use(VueRequest, options)
 ```
+
+## Build Setup
+
+``` bash
+# install dependencies
+npm install
+
+# serve demo at localhost:8080
+npm start
+
+# run tests with jest
+npm test
+```
+
+For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
