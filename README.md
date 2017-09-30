@@ -94,6 +94,32 @@ const options = {
 Vue.use(VueRequest, options)
 ```
 
+## Usage
+
+```js
+import Vue from 'vue'
+export default {
+  mounted() {
+    this.fetch()
+  },
+  methods: {
+    async fetch() {
+      const response = await this.$request('/data')
+      this.$store.dispatch('set_data', response)
+    },
+    save() {
+      const response = await this.$request('/data', {
+        method: 'put',
+        body: {
+          foo: 'bar'
+        }
+      })
+      this.$store.dispatch('saved_data', response)
+    }
+  }
+}
+```
+
 ## Build Setup
 
 ``` bash
