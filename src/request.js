@@ -20,7 +20,7 @@ export default function Request(
 ) {
   const options = _.merge({}, defaults(), _options)
   const body = options.body
-    ? JSON.stringify(body)
+    ? JSON.stringify(options.body)
     : undefined
 
   const method = options.method
