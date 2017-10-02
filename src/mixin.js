@@ -29,5 +29,3 @@ export default (Vue, config) => ({
     init(this, config)
   }
 })
-
-export { Request }
