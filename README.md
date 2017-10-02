@@ -1,7 +1,7 @@
 # vue-request
 
-[![Build](https://travis-ci.org/nickforddesign/vue-req.svg?branch=master)](#)
-[![Coverage Status](https://coveralls.io/repos/github/nickforddesign/vue-req/badge.svg?branch=master)](https://coveralls.io/github/nickforddesign/vue-req?branch=master)
+[![Build](https://travis-ci.org/nickforddesign/vue-requests.svg?branch=master)](#)
+[![Coverage Status](https://coveralls.io/repos/github/nickforddesign/vue-requests/badge.svg?branch=master)](https://coveralls.io/github/nickforddesign/vue-requests?branch=master)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 > A modern fetch plugin for Vue.js with easy config config and hooks
@@ -9,16 +9,16 @@
 ## Installation
 
 ``` bash
-npm install vue-req
+npm install vue-requests
 ```
 
 ## Setup
 
 ```js
 import Vue from 'vue'
-import VueRequest from 'vue-req'
+import VueRequests from 'vue-requests'
 
-Vue.use(VueRequest, options)
+Vue.use(VueRequests, options)
 ```
 
 ## Options
@@ -43,7 +43,7 @@ const options = {
   }
 }
 
-Vue.use(VueRequest, options)
+Vue.use(VueRequests, options)
 ```
 
 ### before [Function]
@@ -67,7 +67,7 @@ const options = {
   }
 }
 
-Vue.use(VueRequest, options)
+Vue.use(VueRequests, options)
 ```
 
 ### timeout [Function]
@@ -80,7 +80,7 @@ const options = {
   }
 }
 
-Vue.use(VueRequest, options)
+Vue.use(VueRequests, options)
 ```
 
 ### timeout_duration [Number]
@@ -91,7 +91,7 @@ const options = {
   timeout_duration: 25000
 }
 
-Vue.use(VueRequest, options)
+Vue.use(VueRequests, options)
 ```
 
 ## Usage
