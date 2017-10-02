@@ -120,6 +120,22 @@ export default {
 }
 ```
 
+## Requests
+The request function accepts the following parameters:
+
+### url [String]
+The base url to make relative requests from. If an absolute url is passed to the request function, this will be overriden.
+
+### options [Object]
+The options parameter accepts the following parameters:
+#### method [String]
+The method of the request (get (default), put, post, delete, options)
+#### body [Object|String]
+The body of the request
+### headers [Headers]
+Custom headers to add to the request
+
+
 ## Build Setup
 
 ``` bash

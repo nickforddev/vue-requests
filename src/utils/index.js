@@ -49,7 +49,6 @@ export function validateArgs (options = {}) {
 }
 
 export async function handleXHRErrors (response) {
-  console.log({response})
   const text = await response.text()
   try {
     const json = JSON.parse(text)
