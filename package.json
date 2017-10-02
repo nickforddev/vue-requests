@@ -1,6 +1,6 @@
 {
   "name": "vue-req",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Another fetch plugin for Vue",
   "author": "Nick Ford <nickforddesign@gmail.com>",
   "repository": "https://github.com/nickforddesign/vue-req",
