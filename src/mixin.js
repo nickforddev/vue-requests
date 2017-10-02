@@ -16,7 +16,7 @@ const init = async (vm, _config) => {
     console.warn(error)
   }
   const config = _.merge({}, defaults, _config)
-  vm.$request = async (url, options, hook) => {
+  vm.$request = async (url, options, hook = true) => {
     if (typeof config.before === 'function' && hook) {
       await config.before(vm)
     }
