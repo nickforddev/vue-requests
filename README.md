@@ -1,4 +1,4 @@
-# vue-request
+# vue-requests
 
 [![Build](https://travis-ci.org/nickforddesign/vue-requests.svg?branch=master)](#)
 [![Coverage Status](https://coveralls.io/repos/github/nickforddesign/vue-requests/badge.svg?branch=master)](https://coveralls.io/github/nickforddesign/vue-requests?branch=master)
