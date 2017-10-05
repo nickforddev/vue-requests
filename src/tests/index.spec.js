@@ -1,11 +1,11 @@
-import VueRequest from '../index'
+import VueRequests from '../index'
 import Vue from 'vue'
 
-Vue.use(VueRequest)
+Vue.use(VueRequests)
 
 const app = new Vue()
 
-describe('vue-req', () => {
+describe('vue-requests', () => {
   fetch.mockResponseOnce(JSON.stringify({
     'foo': 'bar'
   }), {
