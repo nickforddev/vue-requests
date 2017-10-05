@@ -1,4 +1,6 @@
-import _ from 'lodash'
+import _merge from 'lodash.merge'
+import _pickBy from 'lodash.pickby'
+import _identity from 'lodash.identity'
 
 function isDef (item) {
   return item !== undefined
@@ -63,13 +65,13 @@ export async function handleXHRErrors (response) {
 }
 
 export function processHeaders (default_headers, passed_headers) {
-  let headers = _.merge({}, default_headers, passed_headers)
+  let headers = _merge({}, default_headers, passed_headers)
 
   for (let key in headers) {
     if (typeof headers[key] === 'function') {
       headers[key] = headers[key]()
     }
   }
-  headers = _.pickBy(headers, _.identity)
+  headers = _pickBy(headers, _identity)
   return new Headers(headers)
 }
