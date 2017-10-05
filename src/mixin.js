@@ -1,4 +1,5 @@
-import _ from 'lodash'
+// import _ from 'lodash'
+import _merge from 'lodash.merge'
 import Request from './request'
 import { validateArgs } from './utils'
 
@@ -15,10 +16,10 @@ const init = async (vm, _config) => {
   } catch (error) {
     console.warn(error)
   }
-  const config = _.merge({}, defaults, _config)
-  vm.$request = async (url, options) => {
-    if (typeof config.before === 'function') {
-      await config.before()
+  const config = _merge({}, defaults, _config)
+  vm.$request = async (url, options, hook = true) => {
+    if (typeof config.before === 'function' && hook) {
+      await config.before(vm)
     }
     return Request(url, options, config)
   }

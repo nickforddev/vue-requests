@@ -1,5 +1,6 @@
 
-import _ from 'lodash'
+// import _ from 'lodash'
+import _merge from 'lodash.merge'
 import 'whatwg-fetch'
 import { handleXHRErrors, processHeaders } from './utils'
 
@@ -18,7 +19,7 @@ export default function Request(
   _options = {},
   config = {}
 ) {
-  const options = _.merge({}, defaults(), _options)
+  const options = _merge({}, defaults(), _options)
   const body = options.body
     ? JSON.stringify(body)
     : undefined
