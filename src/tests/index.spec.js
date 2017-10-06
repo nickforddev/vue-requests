@@ -34,7 +34,6 @@ describe('vue-requests', () => {
     expect.assertions(1)
     return app.$request('/')
       .catch(error => {
-        // console.log(error)
         expect(error)
           .toBeInstanceOf(Object)
       })
