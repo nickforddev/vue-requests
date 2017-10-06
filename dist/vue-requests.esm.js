@@ -3,12 +3,6 @@
   * (c) 2017 Nick Ford
   * @license MIT
   */
-(function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-	typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	(factory((global['vue-requests'] = {})));
-}(this, (function (exports) { 'use strict';
-
 var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
 
@@ -7931,9 +7925,5 @@ var VueRequest = function () {
   return VueRequest;
 }();
 
-exports['default'] = VueRequest;
-exports.Request = Request;
-
-Object.defineProperty(exports, '__esModule', { value: true });
-
-})));
+export { Request };
+export default VueRequest;

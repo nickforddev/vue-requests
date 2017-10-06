@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import App from './App'
+// import VueRequest from '../../dist/vue-requests.js'
 import VueRequest from '../index'
 
 Vue.config.productionTip = false
