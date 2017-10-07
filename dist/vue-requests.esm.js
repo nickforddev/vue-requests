@@ -1,5 +1,5 @@
 /**
-  * vue-requests v1.0.10
+  * vue-requests v1.0.12
   * (c) 2017 Nick Ford
   * @license MIT
   */
@@ -7684,6 +7684,8 @@ function isDef(item) {
   return item !== undefined;
 }
 
+
+
 function validateArgs() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
@@ -7789,7 +7791,6 @@ function processHeaders(default_headers, passed_headers) {
   return new Headers(headers);
 }
 
-// import _ from 'lodash'
 var defaults$1 = function defaults() {
   return {
     method: 'GET',
@@ -7828,7 +7829,7 @@ function Request() {
   })]);
   race.catch(function (err) {
     if (err === 'request_timeout') {
-      config.timeout();
+      config.timeout.apply(config.vm);
     }
   });
   return race;
@@ -7856,22 +7857,25 @@ var init = function () {
             } catch (error) {
               console.warn(error);
             }
-            config = lodash_merge({}, defaults, _config);
+            config = lodash_merge({
+              vm: vm
+            }, defaults, _config);
+
 
             vm.$request = function () {
               var _ref2 = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee(url, options) {
-                var hook = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+                var fire_hooks = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
                 return regenerator.wrap(function _callee$(_context) {
                   while (1) {
                     switch (_context.prev = _context.next) {
                       case 0:
-                        if (!(typeof config.before === 'function' && hook)) {
+                        if (!(typeof config.before === 'function' && fire_hooks)) {
                           _context.next = 3;
                           break;
                         }
 
                         _context.next = 3;
-                        return config.before(vm);
+                        return config.before.apply(vm);
 
                       case 3:
                         return _context.abrupt('return', Request(url, options, config));
