@@ -1,4 +1,5 @@
 import VueRequests from '../index'
+// import VueRequests from '../../dist/vue-requests.esm'
 import Vue from 'vue'
 
 import { sleep } from '../utils'
