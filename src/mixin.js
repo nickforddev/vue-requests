@@ -16,10 +16,13 @@ const init = async (vm, _config) => {
   } catch (error) {
     console.warn(error)
   }
-  const config = _merge({}, defaults, _config)
-  vm.$request = async (url, options, hook = true) => {
-    if (typeof config.before === 'function' && hook) {
-      await config.before(vm)
+  const config = _merge({
+    vm
+  }, defaults, _config)
+
+  vm.$request = async (url, options, fire_hooks = true) => {
+    if (typeof config.before === 'function' && fire_hooks) {
+      await config.before.apply(vm)
     }
     return Request(url, options, config)
   }

@@ -6,6 +6,10 @@ function isDef (item) {
   return item !== undefined
 }
 
+export function sleep (ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
 export function validateArgs (options = {}) {
   const functions = {
     before: options.before,

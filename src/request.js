@@ -1,5 +1,4 @@
 
-// import _ from 'lodash'
 import _merge from 'lodash.merge'
 import 'whatwg-fetch'
 import { handleXHRErrors, processHeaders } from './utils'
@@ -46,7 +45,7 @@ export default function Request(
   ])
   race.catch((err) => {
     if (err === 'request_timeout') {
-      config.timeout()
+      config.timeout.apply(config.vm)
     }
   })
   return race
