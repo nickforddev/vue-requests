@@ -1,6 +1,6 @@
 # vue-requests
 
-[![Version](https://img.shields.io/npm/v/vue-requests.svg?maxAge=2592000)](#)
+[![Version](https://img.shields.io/npm/v/vue-requests.svg)](#)
 [![Build](https://travis-ci.org/nickforddesign/vue-requests.svg?branch=master)](#)
 [![Coverage Status](https://coveralls.io/repos/github/nickforddesign/vue-requests/badge.svg?branch=master)](https://coveralls.io/github/nickforddesign/vue-requests?branch=master)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
