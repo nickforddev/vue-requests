@@ -1,5 +1,5 @@
 /**
-  * vue-requests v1.0.12
+  * vue-requests v1.0.13
   * (c) 2017 Nick Ford
   * @license MIT
   */

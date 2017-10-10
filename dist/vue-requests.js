@@ -1,5 +1,5 @@
 /**
-  * vue-requests v1.0.12
+  * vue-requests v1.0.13
   * (c) 2017 Nick Ford
   * @license MIT
   */
@@ -7930,12 +7930,15 @@ var VueRequest = function () {
     value: function install(Vue, options) {
       Vue.mixin(makeMixin(Vue, options));
     }
+  }, {
+    key: 'Request',
+    value: function Request$$1() {
+      return Request.apply(undefined, arguments);
+    }
   }]);
 
   return VueRequest;
 }();
-
-VueRequest.Request = Request;
 
 return VueRequest;
 
