@@ -1,4 +1,3 @@
-// import _ from 'lodash'
 import _merge from 'lodash.merge'
 import Request from './request'
 import { validateArgs } from './utils'
