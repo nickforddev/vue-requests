@@ -1,34 +1,47 @@
 <template>
   <div id="app">
+    <h2>vue-requests</h2>
+    <p>The following is a basic demo of the vue-requests plugin. There is a demo express server running on port <strong>{{ port }}</strong>, set up to respond to basic requests.</p>
     <button @click="test('get')">Get</button>
     <button @click="test('put')">Put</button>
     <button @click="test('post')">Post</button>
     <button @click="test('delete')">Delete</button>
-
-    <div>
-      <button @click="jsfiddle">Get JSFiddle</button>
-    </div>
+    <pre>{{ display }}</pre>
   </div>
 </template>
 
 <script>
+const { port } = require('./config')
+
 export default {
   name: 'app',
+  data() {
+    return {
+      port,
+      response: null
+    }
+  },
+  computed: {
+    display() {
+      return this.response
+        ? `From server:
+        
+${JSON.stringify(this.response, null, '  ')}`
+        : 'Click a button to send request'
+    }
+  },
   methods: {
     test(method) {
-      this.$request('/thing', {
+      this.$request('/', {
         method
       })
-        .then(response => {
-          console.log({response})
-        })
-        .catch(err => {
-          console.warn(err)
-        })
-    },
-    async jsfiddle() {
-      const response = await this.$request('http://google.com/')
-      console.log({response})
+      .then(response => {
+        this.response = response
+        // alert(`Server responded correctly: ${response.message}`)
+      })
+      .catch(err => {
+        console.warn(err)
+      })
     }
   }
 }
@@ -39,8 +52,20 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  /* text-align: center; */
   color: #2c3e50;
-  margin-top: 60px;
+  padding: 0 30px;
+  width: 500px;
+  max-width: 100%;
+  /* margin-top: 60px; */
+}
+
+pre {
+  background: #37373e;
+  color: #a4ffd2;
+  padding: 14px;
+  border-radius: 4px;
+  font-family: 'Inconsolata', monospace;
+  font-size: 13px;
 }
 </style>

@@ -3,12 +3,14 @@ import App from './App'
 // import VueRequest from '../../dist/vue-requests.js'
 import VueRequest from '../index'
 
+const { port } = require('./config')
+
 Vue.config.productionTip = false
 
 const token = 'test'
 
 Vue.use(VueRequest, {
-  root: 'http://localhost:8080',
+  root: `http://localhost:${port}`,
   headers: {
     Access() {
       return token
