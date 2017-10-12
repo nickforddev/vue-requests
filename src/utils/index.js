@@ -1,6 +1,4 @@
-import _merge from 'lodash.merge'
-import _pickBy from 'lodash.pickby'
-import _identity from 'lodash.identity'
+import { mergeDeepRight, pickBy } from 'ramda'
 
 function isDef (item) {
   return item !== undefined
@@ -69,13 +67,13 @@ export async function handleXHRErrors (response) {
 }
 
 export function processHeaders (default_headers, passed_headers) {
-  let headers = _merge({}, default_headers, passed_headers)
+  let headers = mergeDeepRight(default_headers, passed_headers)
 
   for (let key in headers) {
     if (typeof headers[key] === 'function') {
       headers[key] = headers[key]()
     }
   }
-  headers = _pickBy(headers, _identity)
+  headers = pickBy(isDef, headers)
   return new Headers(headers)
 }

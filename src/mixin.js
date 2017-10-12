@@ -1,4 +1,4 @@
-import _merge from 'lodash.merge'
+import { mergeDeepRight } from 'ramda'
 import Request from './request'
 import { validateArgs } from './utils'
 
@@ -15,9 +15,10 @@ const init = async (vm, _config) => {
   } catch (error) {
     console.warn(error)
   }
-  const config = _merge({
-    vm
-  }, defaults, _config)
+  const config = mergeDeepRight(
+    mergeDeepRight({ vm }, defaults),
+     _config
+  )
 
   vm.$request = async (url, options, fire_hooks = true) => {
     if (typeof config.before === 'function' && fire_hooks) {

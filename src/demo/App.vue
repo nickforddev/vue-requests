@@ -18,16 +18,20 @@ export default {
   data() {
     return {
       port,
-      response: null
+      response: null,
+      error: null
     }
   },
   computed: {
     display() {
-      return this.response
-        ? `From server:
-        
+      return this.error
+        ? this.error
+        : this.response
+          ? `
+From server:
+
 ${JSON.stringify(this.response, null, '  ')}`
-        : 'Click a button to send request'
+          : 'Click a button to send request'
     }
   },
   methods: {
@@ -37,10 +41,12 @@ ${JSON.stringify(this.response, null, '  ')}`
       })
       .then(response => {
         this.response = response
+        this.error = null
         // alert(`Server responded correctly: ${response.message}`)
       })
-      .catch(err => {
-        console.warn(err)
+      .catch(() => {
+        this.error = 'Cannot communicate with server'
+        // console.warn(err)
       })
     }
   }

@@ -1,6 +1,6 @@
 
-import _merge from 'lodash.merge'
 import 'whatwg-fetch'
+import { mergeDeepRight } from 'ramda'
 import { handleXHRErrors, processHeaders } from './utils'
 
 const defaults = () => {
@@ -18,7 +18,8 @@ export default function Request(
   _options = {},
   config = {}
 ) {
-  const options = _merge({}, defaults(), _options)
+  // const options = _merge({}, defaults(), _options)
+  const options = mergeDeepRight(defaults(), _options)
   const body = options.body
     ? JSON.stringify(options.body)
     : undefined
@@ -29,7 +30,6 @@ export default function Request(
   if (!/^https?:\/\//i.test(url)) {
     url = config.root + url
   }
-
   const race = Promise.race([
     fetch(url, {
       method,
