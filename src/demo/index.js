@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import App from './App'
+import App from './demo'
 // import VueRequest from '../../dist/vue-requests.js'
 import VueRequest from '../index'
 

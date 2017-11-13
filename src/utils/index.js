@@ -52,14 +52,17 @@ export function validateArgs (options = {}) {
   }
 }
 
-export async function handleXHRErrors (response) {
+export async function handleXHRErrors (response, options = {}) {
   const text = await response.text()
+
   try {
     const json = JSON.parse(text)
     if (!response.ok) {
       return Promise.reject(json)
     } else {
-      return json
+      return options.responseHeaders
+        ? { body: json, headers: response.headers.entries() }
+        : json
     }
   } catch (error) {
     return Promise.reject(text)

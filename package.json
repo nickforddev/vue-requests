@@ -93,9 +93,12 @@
   "jest": {
     "collectCoverage": true,
     "coverageDirectory": "<rootDir>/coverage",
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/src/demo"
+    ],
     "testPathIgnorePatterns": [
-      "<rootDir>/node_modules",
-      "<rootDir>/config"
+      "<rootDir>/node_modules/",
+      "<rootDir>/config/"
     ],
     "moduleFileExtensions": [
       "js",

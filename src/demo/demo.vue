@@ -6,6 +6,7 @@
     <button @click="test('put')">Put</button>
     <button @click="test('post')">Post</button>
     <button @click="test('delete')">Delete</button>
+    <button @click="getWithHeaders">Get with response headers</button>
     <pre>{{ display }}</pre>
   </div>
 </template>
@@ -19,7 +20,8 @@ export default {
     return {
       port,
       response: null,
-      error: null
+      error: null,
+      headers: null
     }
   },
   computed: {
@@ -27,8 +29,11 @@ export default {
       return this.error
         ? this.error
         : this.response
-          ? `
-From server:
+          ? this.headers
+            ? `From server:
+
+${JSON.stringify(this.headers, null, '  ')}`
+            : `From server:
 
 ${JSON.stringify(this.response, null, '  ')}`
           : 'Click a button to send request'
@@ -42,11 +47,22 @@ ${JSON.stringify(this.response, null, '  ')}`
       .then(response => {
         this.response = response
         this.error = null
+        this.headers = null
         // alert(`Server responded correctly: ${response.message}`)
       })
       .catch(() => {
         this.error = 'Cannot communicate with server'
         // console.warn(err)
+      })
+    },
+    getWithHeaders() {
+      this.$request('/', {
+        responseHeaders: true
+      })
+      .then(response => {
+        this.response = response.body
+        this.headers = Array.from(response.headers)
+        console.log(response.headers)
       })
     }
   }

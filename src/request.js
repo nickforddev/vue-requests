@@ -36,7 +36,9 @@ export default function Request(
       body,
       headers
     })
-    .then(handleXHRErrors),
+    .then(response => {
+      return handleXHRErrors(response, options)
+    }),
     new Promise((resolve, reject) => {
       setTimeout(() => {
         reject('request_timeout')

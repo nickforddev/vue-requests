@@ -53,7 +53,7 @@ Before hook to fire before each request. The hook uses async/await, so asynchron
 Here's an example of a before hook checking for expired tokens and attempting to refresh before the original request:
 
 ```js
-import moment from 'moment'
+// import moment from 'moment'
 import store from './store'
 
 const token = {
@@ -62,8 +62,8 @@ const token = {
 }
 const options = {
   async before() {
-    if (moment.utc(token.expires) >= moment.utc()) {
-      store.dispatch('refresh_tokens')
+    if (new Date(token.expires) >= new Date()) {
+      await store.dispatch('refresh_tokens')
     }
   }
 }
@@ -115,7 +115,6 @@ export default {
           foo: 'bar'
         }
       })
-      this.$store.dispatch('saved_data', response)
     }
   }
 }
