@@ -2527,6 +2527,7 @@ function validateArgs() {
 }
 var handleXHRErrors = function () {
   var _ref = _asyncToGenerator(              regenerator.mark(function _callee(response) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var text, json;
     return regenerator.wrap(function _callee$(_context) {
       while (1) {
@@ -2544,7 +2545,7 @@ var handleXHRErrors = function () {
             }
             return _context.abrupt('return', _Promise.reject(json));
           case 9:
-            return _context.abrupt('return', json);
+            return _context.abrupt('return', options.responseHeaders ? { body: json, headers: response.headers.entries() } : json);
           case 10:
             _context.next = 15;
             break;
@@ -2596,7 +2597,9 @@ function Request() {
     method: method,
     body: body,
     headers: headers
-  }).then(handleXHRErrors), new _Promise(function (resolve, reject) {
+  }).then(function (response) {
+    return handleXHRErrors(response, options);
+  }), new _Promise(function (resolve, reject) {
     setTimeout(function () {
       reject('request_timeout');
     }, config.timeout_duration);
