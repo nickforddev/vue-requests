@@ -1,20 +1,16 @@
 import { mergeDeepRight } from 'ramda'
 import Request from './request'
 import { validateArgs } from './utils'
-
-const defaults = {
-  timeout_duration: 20000,
-  timeout: false,
-  headers: {},
-  root: ''
-}
+import defaults from './defaults'
 
 const init = async (vm, _config) => {
-  try {
-    validateArgs(_config)
-  } catch (error) {
-    console.warn(error)
-  }
+  // try {
+  //   validateArgs(_config)
+  // } catch (error) {
+  //   console.warn(error)
+  // }
+  validateArgs(_config)
+
   const config = mergeDeepRight(
     mergeDeepRight({ vm }, defaults),
      _config

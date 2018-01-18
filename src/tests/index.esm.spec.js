@@ -1,8 +1,6 @@
 import Vue from 'vue'
-import VueRequests from '../index'
+import VueRequests, { Request } from '../index.esm'
 import tests from './tests'
-
-const Request = VueRequests.Request
 
 Vue.config.productionTip = false
 

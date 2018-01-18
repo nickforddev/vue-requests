@@ -1,6 +1,6 @@
-import { sleep } from '../utils'
+import { sleep, validateArgs } from '../utils'
 
-export default (Vue, spyBefore, spyTimeout) => {
+export default (Vue, spyBefore, spyTimeout, Request) => {
   const app = new Vue()
 
   // spy on app.$request
@@ -99,6 +99,23 @@ export default (Vue, spyBefore, spyTimeout) => {
         })
     })
 
+    fetch.mockResponseOnce(JSON.stringify({
+      'foo': 'bar'
+    }), {
+      status: 200
+    })
+
+    describe('Request function', () => {
+      it('should be able to fetch as a standalone function', async () => {
+        expect.assertions(1)
+        const response = await Request('test')
+        expect(response)
+          .toEqual({
+            'foo': 'bar'
+          })
+      })
+    })
+
     it('should timeout a request per timeout_duration', () => {
       global.fetch = async (...args) => {
         await sleep(2000)
@@ -120,6 +137,15 @@ export default (Vue, spyBefore, spyTimeout) => {
     it('the timeout hook should have the vue instance applied', () => {
       expect(spyTimeout.mock.calls[0][0])
         .toBeInstanceOf(Vue)
+    })
+
+    it('should throw errors for invalid config', () => {
+      expect(() => {
+        validateArgs({
+          root: 2344
+        })
+      })
+      .toThrow('Expected parameter "root" to be a string, received number')
     })
   })
 }

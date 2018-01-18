@@ -1,14 +1,13 @@
 
 import 'whatwg-fetch'
 import { mergeDeepRight } from 'ramda'
-import { handleXHRErrors, processHeaders } from './utils'
+import { processResponse, processHeaders } from './utils'
+import defaults from './defaults'
 
-const defaults = () => {
-  return {
-    method: 'GET',
-    body: undefined,
-    headers: {}
-  }
+const default_options = {
+  method: 'GET',
+  body: undefined,
+  headers: {}
 }
 
 // generic, unauthenticated XHR
@@ -16,10 +15,11 @@ const defaults = () => {
 export default function Request(
   url = '',
   _options = {},
-  config = {}
+  _config = {}
 ) {
   // const options = _merge({}, defaults(), _options)
-  const options = mergeDeepRight(defaults(), _options)
+  const options = mergeDeepRight(default_options, _options)
+  const config = mergeDeepRight(defaults, _config)
   const body = options.body
     ? JSON.stringify(options.body)
     : undefined
@@ -37,7 +37,7 @@ export default function Request(
       headers
     })
     .then(response => {
-      return handleXHRErrors(response, options)
+      return processResponse(response, options)
     }),
     new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -47,7 +47,9 @@ export default function Request(
   ])
   race.catch((err) => {
     if (err === 'request_timeout') {
-      config.timeout.apply(config.vm)
+      if (typeof config.timeout === 'function') {
+        config.timeout.apply(config.vm)
+      }
     }
   })
   return race

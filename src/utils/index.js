@@ -52,7 +52,7 @@ export function validateArgs (options = {}) {
   }
 }
 
-export async function handleXHRErrors (response, options = {}) {
+export async function processResponse (response, options = {}) {
   const text = await response.text()
 
   try {

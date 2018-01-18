@@ -135,6 +135,19 @@ The body of the request
 ### headers [Headers]
 Custom headers to add to the request
 
+## Response Headers
+
+If you need access to the response headers, you can pass the `responseHeaders` option to the request method, which will result in the promise being resolved with an object containing body and headers.
+
+```js
+this.$request('/data', {
+  responseHeaders: true
+})
+.then(response => {
+  console.log(response.body, response.headers)
+})
+```
+
 
 ## Build Setup
 
