@@ -1,6 +1,6 @@
 /**
-  * vue-requests v1.0.15
-  * (c) 2017 Nick Ford
+  * vue-requests v1.1.2
+  * (c) 2018 Nick Ford
   * @license MIT
   */
 function unwrapExports (x) {
@@ -2519,7 +2519,7 @@ function validateArgs() {
     }
   }
 }
-var handleXHRErrors = function () {
+var processResponse = function () {
   var _ref = _asyncToGenerator(              regenerator.mark(function _callee(response) {
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var text, json;
@@ -2554,7 +2554,7 @@ var handleXHRErrors = function () {
       }
     }, _callee, this, [[3, 12]]);
   }));
-  return function handleXHRErrors(_x2) {
+  return function processResponse(_x2) {
     return _ref.apply(this, arguments);
   };
 }();
@@ -2569,18 +2569,23 @@ function processHeaders(default_headers, passed_headers) {
   return new Headers(headers);
 }
 
-var defaults$1 = function defaults() {
-  return {
-    method: 'GET',
-    body: undefined,
-    headers: {}
-  };
+var defaults = {
+  timeout_duration: 20000,
+  timeout: false,
+  headers: {},
+  root: ''
 };
-function Request() {
+
+var default_options = {
+  method: 'GET',
+  body: undefined,
+  headers: {}
+};function Request() {
   var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
   var _options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-  var config = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-  var options = mergeDeepRight_1(defaults$1(), _options);
+  var _config = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+  var options = mergeDeepRight_1(default_options, _options);
+  var config = mergeDeepRight_1(defaults, _config);
   var body = options.body ? _JSON$stringify(options.body) : undefined;
   var method = options.method;
   var headers = processHeaders(config.headers, options.headers);
@@ -2592,7 +2597,7 @@ function Request() {
     body: body,
     headers: headers
   }).then(function (response) {
-    return handleXHRErrors(response, options);
+    return processResponse(response, options);
   }), new _Promise(function (resolve, reject) {
     setTimeout(function () {
       reject('request_timeout');
@@ -2600,19 +2605,15 @@ function Request() {
   })]);
   race.catch(function (err) {
     if (err === 'request_timeout') {
-      config.timeout.apply(config.vm);
+      if (typeof config.timeout === 'function') {
+        config.timeout.apply(config.vm);
+      }
     }
   });
   return race;
 }
 
 var _this = undefined;
-var defaults = {
-  timeout_duration: 20000,
-  timeout: false,
-  headers: {},
-  root: ''
-};
 var init = function () {
   var _ref = _asyncToGenerator(              regenerator.mark(function _callee2(vm, _config) {
     var config;
@@ -2620,11 +2621,7 @@ var init = function () {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
-            try {
-              validateArgs(_config);
-            } catch (error) {
-              console.warn(error);
-            }
+            validateArgs(_config);
             config = mergeDeepRight_1(mergeDeepRight_1({ vm: vm }, defaults), _config);
             vm.$request = function () {
               var _ref2 = _asyncToGenerator(              regenerator.mark(function _callee(url, options) {
