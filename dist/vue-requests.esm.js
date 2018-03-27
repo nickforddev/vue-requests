@@ -1,5 +1,5 @@
 /**
-  * vue-requests v1.1.4
+  * vue-requests v1.1.5
   * (c) 2018 Nick Ford
   * @license MIT
   */
@@ -2457,7 +2457,7 @@ var processResponse = function () {
   };
 }();
 function processHeaders(default_headers, passed_headers) {
-  var headers = _Object$assign({}, default_headers, passed_headers);
+  var headers = passed_headers === false ? {} : _Object$assign({}, default_headers, passed_headers);
   for (var key in headers) {
     if (typeof headers[key] === 'function') {
       headers[key] = headers[key]();
