@@ -1,5 +1,5 @@
 /**
-  * vue-requests v1.1.2
+  * vue-requests v1.1.3
   * (c) 2018 Nick Ford
   * @license MIT
   */
@@ -1744,6 +1744,51 @@ module.exports = { "default": stringify$1, __esModule: true };
 });
 var _JSON$stringify = unwrapExports(stringify);
 
+var f$2 = Object.getOwnPropertySymbols;
+var _objectGops = {
+	f: f$2
+};
+
+var f$3 = {}.propertyIsEnumerable;
+var _objectPie = {
+	f: f$3
+};
+
+'use strict';
+var $assign = Object.assign;
+var _objectAssign = !$assign || _fails(function () {
+  var A = {};
+  var B = {};
+  var S = Symbol();
+  var K = 'abcdefghijklmnopqrst';
+  A[S] = 7;
+  K.split('').forEach(function (k) { B[k] = k; });
+  return $assign({}, A)[S] != 7 || Object.keys($assign({}, B)).join('') != K;
+}) ? function assign(target, source) {
+  var T = _toObject(target);
+  var aLen = arguments.length;
+  var index = 1;
+  var getSymbols = _objectGops.f;
+  var isEnum = _objectPie.f;
+  while (aLen > index) {
+    var S = _iobject(arguments[index++]);
+    var keys = getSymbols ? _objectKeys(S).concat(getSymbols(S)) : _objectKeys(S);
+    var length = keys.length;
+    var j = 0;
+    var key;
+    while (length > j) if (isEnum.call(S, key = keys[j++])) T[key] = S[key];
+  } return T;
+} : $assign;
+
+_export(_export.S + _export.F, 'Object', { assign: _objectAssign });
+
+var assign$1 = _core.Object.assign;
+
+var assign = createCommonjsModule(function (module) {
+module.exports = { "default": assign$1, __esModule: true };
+});
+var _Object$assign = unwrapExports(assign);
+
 (function(self) {
   'use strict';
   if (self.fetch) {
@@ -2135,20 +2180,9 @@ var _JSON$stringify = unwrapExports(stringify);
   self.fetch.polyfill = true;
 })(typeof self !== 'undefined' ? self : undefined);
 
-var pickBy =              _curry2_1(function pickBy(test, obj) {
-  var result = {};
-  for (var prop in obj) {
-    if (test(obj[prop], prop, obj)) {
-      result[prop] = obj[prop];
-    }
-  }
-  return result;
-});
-var pickBy_1 = pickBy;
-
-var f$2 = _wks;
+var f$4 = _wks;
 var _wksExt = {
-	f: f$2
+	f: f$4
 };
 
 var iterator$2 = _wksExt.f('iterator');
@@ -2206,16 +2240,6 @@ var defineProperty$4 = _objectDp.f;
 var _wksDefine = function (name) {
   var $Symbol = _core.Symbol || (_core.Symbol = _library ? {} : _global.Symbol || {});
   if (name.charAt(0) != '_' && !(name in $Symbol)) defineProperty$4($Symbol, name, { value: _wksExt.f(name) });
-};
-
-var f$3 = Object.getOwnPropertySymbols;
-var _objectGops = {
-	f: f$3
-};
-
-var f$4 = {}.propertyIsEnumerable;
-var _objectPie = {
-	f: f$4
 };
 
 var _enumKeys = function (it) {
@@ -2478,6 +2502,15 @@ var _typeof = unwrapExports(_typeof_1);
 function isDef(item) {
   return item !== undefined;
 }
+function pickBy(test, obj) {
+  var output = {};
+  for (var key in obj) {
+    if (test(obj[key])) {
+      output[key] = obj[key];
+    }
+  }
+  return output;
+}
 
 function validateArgs() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -2559,13 +2592,13 @@ var processResponse = function () {
   };
 }();
 function processHeaders(default_headers, passed_headers) {
-  var headers = mergeDeepRight_1(default_headers, passed_headers);
+  var headers = _Object$assign(default_headers, passed_headers);
   for (var key in headers) {
     if (typeof headers[key] === 'function') {
       headers[key] = headers[key]();
     }
   }
-  headers = pickBy_1(isDef, headers);
+  headers = pickBy(isDef, headers);
   return new Headers(headers);
 }
 
@@ -2580,23 +2613,20 @@ var default_options = {
   method: 'GET',
   body: undefined,
   headers: {}
-};function Request() {
+};
+function Request() {
   var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
   var _options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
   var _config = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-  var options = mergeDeepRight_1(default_options, _options);
-  var config = mergeDeepRight_1(defaults, _config);
+  var options = _Object$assign(default_options, _options);
+  var config = _Object$assign(defaults, _config);
   var body = options.body ? _JSON$stringify(options.body) : undefined;
   var method = options.method;
   var headers = processHeaders(config.headers, options.headers);
   if (!/^https?:\/\//i.test(url)) {
     url = config.root + url;
   }
-  var race = _Promise.race([fetch(url, {
-    method: method,
-    body: body,
-    headers: headers
-  }).then(function (response) {
+  var race = _Promise.race([fetch(url, _Object$assign(options, { method: method }, { body: body }, { headers: headers })).then(function (response) {
     return processResponse(response, options);
   }), new _Promise(function (resolve, reject) {
     setTimeout(function () {
