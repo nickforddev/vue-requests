@@ -716,158 +716,10 @@
 
 	var regenerator = runtimeModule;
 
-	function _isPlaceholder(a) {
-	       return a != null && typeof a === 'object' && a['@@functional/placeholder'] === true;
-	}
-	var _isPlaceholder_1 = _isPlaceholder;
-
-	function _curry1(fn) {
-	  return function f1(a) {
-	    if (arguments.length === 0 || _isPlaceholder_1(a)) {
-	      return f1;
-	    } else {
-	      return fn.apply(this, arguments);
-	    }
-	  };
-	}
-	var _curry1_1 = _curry1;
-
-	function _curry2(fn) {
-	  return function f2(a, b) {
-	    switch (arguments.length) {
-	      case 0:
-	        return f2;
-	      case 1:
-	        return _isPlaceholder_1(a) ? f2 : _curry1_1(function (_b) {
-	          return fn(a, _b);
-	        });
-	      default:
-	        return _isPlaceholder_1(a) && _isPlaceholder_1(b) ? f2 : _isPlaceholder_1(a) ? _curry1_1(function (_a) {
-	          return fn(_a, b);
-	        }) : _isPlaceholder_1(b) ? _curry1_1(function (_b) {
-	          return fn(a, _b);
-	        }) : fn(a, b);
-	    }
-	  };
-	}
-	var _curry2_1 = _curry2;
-
-	function _curry3(fn) {
-	  return function f3(a, b, c) {
-	    switch (arguments.length) {
-	      case 0:
-	        return f3;
-	      case 1:
-	        return _isPlaceholder_1(a) ? f3 : _curry2_1(function (_b, _c) {
-	          return fn(a, _b, _c);
-	        });
-	      case 2:
-	        return _isPlaceholder_1(a) && _isPlaceholder_1(b) ? f3 : _isPlaceholder_1(a) ? _curry2_1(function (_a, _c) {
-	          return fn(_a, b, _c);
-	        }) : _isPlaceholder_1(b) ? _curry2_1(function (_b, _c) {
-	          return fn(a, _b, _c);
-	        }) : _curry1_1(function (_c) {
-	          return fn(a, b, _c);
-	        });
-	      default:
-	        return _isPlaceholder_1(a) && _isPlaceholder_1(b) && _isPlaceholder_1(c) ? f3 : _isPlaceholder_1(a) && _isPlaceholder_1(b) ? _curry2_1(function (_a, _b) {
-	          return fn(_a, _b, c);
-	        }) : _isPlaceholder_1(a) && _isPlaceholder_1(c) ? _curry2_1(function (_a, _c) {
-	          return fn(_a, b, _c);
-	        }) : _isPlaceholder_1(b) && _isPlaceholder_1(c) ? _curry2_1(function (_b, _c) {
-	          return fn(a, _b, _c);
-	        }) : _isPlaceholder_1(a) ? _curry1_1(function (_a) {
-	          return fn(_a, b, c);
-	        }) : _isPlaceholder_1(b) ? _curry1_1(function (_b) {
-	          return fn(a, _b, c);
-	        }) : _isPlaceholder_1(c) ? _curry1_1(function (_c) {
-	          return fn(a, b, _c);
-	        }) : fn(a, b, c);
-	    }
-	  };
-	}
-	var _curry3_1 = _curry3;
-
-	function _isObject$1(x) {
-	  return Object.prototype.toString.call(x) === '[object Object]';
-	}
-	var _isObject_1 = _isObject$1;
-
-	function _has(prop, obj) {
-	  return Object.prototype.hasOwnProperty.call(obj, prop);
-	}
-	var _has_1 = _has;
-
-	var mergeWithKey =              _curry3_1(function mergeWithKey(fn, l, r) {
-	  var result = {};
-	  var k;
-	  for (k in l) {
-	    if (_has_1(k, l)) {
-	      result[k] = _has_1(k, r) ? fn(k, l[k], r[k]) : l[k];
-	    }
-	  }
-	  for (k in r) {
-	    if (_has_1(k, r) && !_has_1(k, result)) {
-	      result[k] = r[k];
-	    }
-	  }
-	  return result;
-	});
-	var mergeWithKey_1 = mergeWithKey;
-
-	var mergeDeepWithKey =              _curry3_1(function mergeDeepWithKey(fn, lObj, rObj) {
-	  return mergeWithKey_1(function (k, lVal, rVal) {
-	    if (_isObject_1(lVal) && _isObject_1(rVal)) {
-	      return mergeDeepWithKey(fn, lVal, rVal);
-	    } else {
-	      return fn(k, lVal, rVal);
-	    }
-	  }, lObj, rObj);
-	});
-	var mergeDeepWithKey_1 = mergeDeepWithKey;
-
-	var mergeDeepRight =              _curry2_1(function mergeDeepRight(lObj, rObj) {
-	  return mergeDeepWithKey_1(function (k, lVal, rVal) {
-	    return rVal;
-	  }, lObj, rObj);
-	});
-	var mergeDeepRight_1 = mergeDeepRight;
-
-	var ceil = Math.ceil;
-	var floor = Math.floor;
-	var _toInteger = function (it) {
-	  return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
-	};
-
-	var _defined = function (it) {
-	  if (it == undefined) throw TypeError("Can't call method on  " + it);
-	  return it;
-	};
-
-	var _stringAt = function (TO_STRING) {
-	  return function (that, pos) {
-	    var s = String(_defined(that));
-	    var i = _toInteger(pos);
-	    var l = s.length;
-	    var a, b;
-	    if (i < 0 || i >= l) return TO_STRING ? '' : undefined;
-	    a = s.charCodeAt(i);
-	    return a < 0xd800 || a > 0xdbff || i + 1 === l || (b = s.charCodeAt(i + 1)) < 0xdc00 || b > 0xdfff
-	      ? TO_STRING ? s.charAt(i) : a
-	      : TO_STRING ? s.slice(i, i + 2) : (a - 0xd800 << 10) + (b - 0xdc00) + 0x10000;
-	  };
-	};
-
-	var _library = true;
-
-	var _redefine = _hide;
-
 	var hasOwnProperty = {}.hasOwnProperty;
-	var _has$1 = function (it, key) {
+	var _has = function (it, key) {
 	  return hasOwnProperty.call(it, key);
 	};
-
-	var _iterators = {};
 
 	var toString = {}.toString;
 	var _cof = function (it) {
@@ -878,8 +730,19 @@
 	  return _cof(it) == 'String' ? it.split('') : Object(it);
 	};
 
+	var _defined = function (it) {
+	  if (it == undefined) throw TypeError("Can't call method on  " + it);
+	  return it;
+	};
+
 	var _toIobject = function (it) {
 	  return _iobject(_defined(it));
+	};
+
+	var ceil = Math.ceil;
+	var floor = Math.floor;
+	var _toInteger = function (it) {
+	  return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
 	};
 
 	var min = Math.min;
@@ -933,8 +796,8 @@
 	  var i = 0;
 	  var result = [];
 	  var key;
-	  for (key in O) if (key != IE_PROTO) _has$1(O, key) && result.push(key);
-	  while (names.length > i) if (_has$1(O, key = names[i++])) {
+	  for (key in O) if (key != IE_PROTO) _has(O, key) && result.push(key);
+	  while (names.length > i) if (_has(O, key = names[i++])) {
 	    ~arrayIndexOf(result, key) || result.push(key);
 	  }
 	  return result;
@@ -947,6 +810,74 @@
 	var _objectKeys = Object.keys || function keys(O) {
 	  return _objectKeysInternal(O, _enumBugKeys);
 	};
+
+	var f$1 = Object.getOwnPropertySymbols;
+	var _objectGops = {
+		f: f$1
+	};
+
+	var f$2 = {}.propertyIsEnumerable;
+	var _objectPie = {
+		f: f$2
+	};
+
+	var _toObject = function (it) {
+	  return Object(_defined(it));
+	};
+
+	var $assign = Object.assign;
+	var _objectAssign = !$assign || _fails(function () {
+	  var A = {};
+	  var B = {};
+	  var S = Symbol();
+	  var K = 'abcdefghijklmnopqrst';
+	  A[S] = 7;
+	  K.split('').forEach(function (k) { B[k] = k; });
+	  return $assign({}, A)[S] != 7 || Object.keys($assign({}, B)).join('') != K;
+	}) ? function assign(target, source) {
+	  var T = _toObject(target);
+	  var aLen = arguments.length;
+	  var index = 1;
+	  var getSymbols = _objectGops.f;
+	  var isEnum = _objectPie.f;
+	  while (aLen > index) {
+	    var S = _iobject(arguments[index++]);
+	    var keys = getSymbols ? _objectKeys(S).concat(getSymbols(S)) : _objectKeys(S);
+	    var length = keys.length;
+	    var j = 0;
+	    var key;
+	    while (length > j) if (isEnum.call(S, key = keys[j++])) T[key] = S[key];
+	  } return T;
+	} : $assign;
+
+	_export(_export.S + _export.F, 'Object', { assign: _objectAssign });
+
+	var assign = _core.Object.assign;
+
+	var assign$1 = createCommonjsModule(function (module) {
+	module.exports = { "default": assign, __esModule: true };
+	});
+	var _Object$assign = unwrapExports(assign$1);
+
+	var _stringAt = function (TO_STRING) {
+	  return function (that, pos) {
+	    var s = String(_defined(that));
+	    var i = _toInteger(pos);
+	    var l = s.length;
+	    var a, b;
+	    if (i < 0 || i >= l) return TO_STRING ? '' : undefined;
+	    a = s.charCodeAt(i);
+	    return a < 0xd800 || a > 0xdbff || i + 1 === l || (b = s.charCodeAt(i + 1)) < 0xdc00 || b > 0xdfff
+	      ? TO_STRING ? s.charAt(i) : a
+	      : TO_STRING ? s.slice(i, i + 2) : (a - 0xd800 << 10) + (b - 0xdc00) + 0x10000;
+	  };
+	};
+
+	var _library = true;
+
+	var _redefine = _hide;
+
+	var _iterators = {};
 
 	var _objectDps = _descriptors ? Object.defineProperties : function defineProperties(O, Properties) {
 	  _anObject(O);
@@ -1006,7 +937,7 @@
 	var def = _objectDp.f;
 	var TAG = _wks('toStringTag');
 	var _setToStringTag = function (it, tag, stat) {
-	  if (it && !_has$1(it = stat ? it : it.prototype, TAG)) def(it, TAG, { configurable: true, value: tag });
+	  if (it && !_has(it = stat ? it : it.prototype, TAG)) def(it, TAG, { configurable: true, value: tag });
 	};
 
 	var IteratorPrototype = {};
@@ -1016,15 +947,11 @@
 	  _setToStringTag(Constructor, NAME + ' Iterator');
 	};
 
-	var _toObject = function (it) {
-	  return Object(_defined(it));
-	};
-
 	var IE_PROTO$2 = _sharedKey('IE_PROTO');
 	var ObjectProto = Object.prototype;
 	var _objectGpo = Object.getPrototypeOf || function (O) {
 	  O = _toObject(O);
-	  if (_has$1(O, IE_PROTO$2)) return O[IE_PROTO$2];
+	  if (_has(O, IE_PROTO$2)) return O[IE_PROTO$2];
 	  if (typeof O.constructor == 'function' && O instanceof O.constructor) {
 	    return O.constructor.prototype;
 	  } return O instanceof Object ? ObjectProto : null;
@@ -1058,7 +985,7 @@
 	    IteratorPrototype = _objectGpo($anyNative.call(new Base()));
 	    if (IteratorPrototype !== Object.prototype && IteratorPrototype.next) {
 	      _setToStringTag(IteratorPrototype, TAG, true);
-	      if (!_library && !_has$1(IteratorPrototype, ITERATOR)) _hide(IteratorPrototype, ITERATOR, returnThis);
+	      if (!_library && !_has(IteratorPrototype, ITERATOR)) _hide(IteratorPrototype, ITERATOR, returnThis);
 	    }
 	  }
 	  if (DEF_VALUES && $native && $native.name !== VALUES) {
@@ -1355,11 +1282,11 @@
 	  this.resolve = _aFunction(resolve);
 	  this.reject = _aFunction(reject);
 	}
-	var f$1 = function (C) {
+	var f$3 = function (C) {
 	  return new PromiseCapability(C);
 	};
 	var _newPromiseCapability = {
-		f: f$1
+		f: f$3
 	};
 
 	var _perform = function (exec) {
@@ -1731,50 +1658,6 @@
 	module.exports = { "default": stringify, __esModule: true };
 	});
 	var _JSON$stringify = unwrapExports(stringify$1);
-
-	var f$2 = Object.getOwnPropertySymbols;
-	var _objectGops = {
-		f: f$2
-	};
-
-	var f$3 = {}.propertyIsEnumerable;
-	var _objectPie = {
-		f: f$3
-	};
-
-	var $assign = Object.assign;
-	var _objectAssign = !$assign || _fails(function () {
-	  var A = {};
-	  var B = {};
-	  var S = Symbol();
-	  var K = 'abcdefghijklmnopqrst';
-	  A[S] = 7;
-	  K.split('').forEach(function (k) { B[k] = k; });
-	  return $assign({}, A)[S] != 7 || Object.keys($assign({}, B)).join('') != K;
-	}) ? function assign(target, source) {
-	  var T = _toObject(target);
-	  var aLen = arguments.length;
-	  var index = 1;
-	  var getSymbols = _objectGops.f;
-	  var isEnum = _objectPie.f;
-	  while (aLen > index) {
-	    var S = _iobject(arguments[index++]);
-	    var keys = getSymbols ? _objectKeys(S).concat(getSymbols(S)) : _objectKeys(S);
-	    var length = keys.length;
-	    var j = 0;
-	    var key;
-	    while (length > j) if (isEnum.call(S, key = keys[j++])) T[key] = S[key];
-	  } return T;
-	} : $assign;
-
-	_export(_export.S + _export.F, 'Object', { assign: _objectAssign });
-
-	var assign = _core.Object.assign;
-
-	var assign$1 = createCommonjsModule(function (module) {
-	module.exports = { "default": assign, __esModule: true };
-	});
-	var _Object$assign = unwrapExports(assign$1);
 
 	(function(self) {
 	  if (self.fetch) {
@@ -2196,21 +2079,21 @@
 	};
 	var fastKey = function (it, create) {
 	  if (!_isObject(it)) return typeof it == 'symbol' ? it : (typeof it == 'string' ? 'S' : 'P') + it;
-	  if (!_has$1(it, META)) {
+	  if (!_has(it, META)) {
 	    if (!isExtensible(it)) return 'F';
 	    if (!create) return 'E';
 	    setMeta(it);
 	  } return it[META].i;
 	};
 	var getWeak = function (it, create) {
-	  if (!_has$1(it, META)) {
+	  if (!_has(it, META)) {
 	    if (!isExtensible(it)) return true;
 	    if (!create) return false;
 	    setMeta(it);
 	  } return it[META].w;
 	};
 	var onFreeze = function (it) {
-	  if (FREEZE && meta.NEED && isExtensible(it) && !_has$1(it, META)) setMeta(it);
+	  if (FREEZE && meta.NEED && isExtensible(it) && !_has(it, META)) setMeta(it);
 	  return it;
 	};
 	var meta = module.exports = {
@@ -2282,7 +2165,7 @@
 	  if (_ie8DomDefine) try {
 	    return gOPD(O, P);
 	  } catch (e) {             }
-	  if (_has$1(O, P)) return _propertyDesc(!_objectPie.f.call(O, P), O[P]);
+	  if (_has(O, P)) return _propertyDesc(!_objectPie.f.call(O, P), O[P]);
 	};
 	var _objectGopd = {
 		f: f$7
@@ -2331,12 +2214,12 @@
 	  _anObject(it);
 	  key = _toPrimitive(key, true);
 	  _anObject(D);
-	  if (_has$1(AllSymbols, key)) {
+	  if (_has(AllSymbols, key)) {
 	    if (!D.enumerable) {
-	      if (!_has$1(it, HIDDEN)) dP$1(it, HIDDEN, _propertyDesc(1, {}));
+	      if (!_has(it, HIDDEN)) dP$1(it, HIDDEN, _propertyDesc(1, {}));
 	      it[HIDDEN][key] = true;
 	    } else {
-	      if (_has$1(it, HIDDEN) && it[HIDDEN][key]) it[HIDDEN][key] = false;
+	      if (_has(it, HIDDEN) && it[HIDDEN][key]) it[HIDDEN][key] = false;
 	      D = _objectCreate(D, { enumerable: _propertyDesc(0, false) });
 	    } return setSymbolDesc(it, key, D);
 	  } return dP$1(it, key, D);
@@ -2355,15 +2238,15 @@
 	};
 	var $propertyIsEnumerable = function propertyIsEnumerable(key) {
 	  var E = isEnum.call(this, key = _toPrimitive(key, true));
-	  if (this === ObjectProto$1 && _has$1(AllSymbols, key) && !_has$1(OPSymbols, key)) return false;
-	  return E || !_has$1(this, key) || !_has$1(AllSymbols, key) || _has$1(this, HIDDEN) && this[HIDDEN][key] ? E : true;
+	  if (this === ObjectProto$1 && _has(AllSymbols, key) && !_has(OPSymbols, key)) return false;
+	  return E || !_has(this, key) || !_has(AllSymbols, key) || _has(this, HIDDEN) && this[HIDDEN][key] ? E : true;
 	};
 	var $getOwnPropertyDescriptor = function getOwnPropertyDescriptor(it, key) {
 	  it = _toIobject(it);
 	  key = _toPrimitive(key, true);
-	  if (it === ObjectProto$1 && _has$1(AllSymbols, key) && !_has$1(OPSymbols, key)) return;
+	  if (it === ObjectProto$1 && _has(AllSymbols, key) && !_has(OPSymbols, key)) return;
 	  var D = gOPD$1(it, key);
-	  if (D && _has$1(AllSymbols, key) && !(_has$1(it, HIDDEN) && it[HIDDEN][key])) D.enumerable = true;
+	  if (D && _has(AllSymbols, key) && !(_has(it, HIDDEN) && it[HIDDEN][key])) D.enumerable = true;
 	  return D;
 	};
 	var $getOwnPropertyNames = function getOwnPropertyNames(it) {
@@ -2372,7 +2255,7 @@
 	  var i = 0;
 	  var key;
 	  while (names.length > i) {
-	    if (!_has$1(AllSymbols, key = names[i++]) && key != HIDDEN && key != META) result.push(key);
+	    if (!_has(AllSymbols, key = names[i++]) && key != HIDDEN && key != META) result.push(key);
 	  } return result;
 	};
 	var $getOwnPropertySymbols = function getOwnPropertySymbols(it) {
@@ -2382,7 +2265,7 @@
 	  var i = 0;
 	  var key;
 	  while (names.length > i) {
-	    if (_has$1(AllSymbols, key = names[i++]) && (IS_OP ? _has$1(ObjectProto$1, key) : true)) result.push(AllSymbols[key]);
+	    if (_has(AllSymbols, key = names[i++]) && (IS_OP ? _has(ObjectProto$1, key) : true)) result.push(AllSymbols[key]);
 	  } return result;
 	};
 	if (!USE_NATIVE$1) {
@@ -2391,7 +2274,7 @@
 	    var tag = _uid(arguments.length > 0 ? arguments[0] : undefined);
 	    var $set = function (value) {
 	      if (this === ObjectProto$1) $set.call(OPSymbols, value);
-	      if (_has$1(this, HIDDEN) && _has$1(this[HIDDEN], tag)) this[HIDDEN][tag] = false;
+	      if (_has(this, HIDDEN) && _has(this[HIDDEN], tag)) this[HIDDEN][tag] = false;
 	      setSymbolDesc(this, tag, _propertyDesc(1, value));
 	    };
 	    if (_descriptors && setter) setSymbolDesc(ObjectProto$1, tag, { configurable: true, set: $set });
@@ -2419,7 +2302,7 @@
 	for (var wellKnownSymbols = _objectKeys(_wks.store), k = 0; wellKnownSymbols.length > k;) _wksDefine(wellKnownSymbols[k++]);
 	_export(_export.S + _export.F * !USE_NATIVE$1, 'Symbol', {
 	  'for': function (key) {
-	    return _has$1(SymbolRegistry, key += '')
+	    return _has(SymbolRegistry, key += '')
 	      ? SymbolRegistry[key]
 	      : SymbolRegistry[key] = $Symbol(key);
 	  },
@@ -2640,7 +2523,7 @@
 	        switch (_context2.prev = _context2.next) {
 	          case 0:
 	            validateArgs(_config);
-	            config = mergeDeepRight_1(mergeDeepRight_1({ vm: vm }, defaults), _config);
+	            config = _Object$assign({ vm: vm }, defaults, _config);
 	            vm.$request = function () {
 	              var _ref2 = _asyncToGenerator(              regenerator.mark(function _callee(url, options) {
 	                var fire_hooks = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
