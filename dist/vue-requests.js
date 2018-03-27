@@ -1,5 +1,5 @@
 /**
-  * vue-requests v1.1.3
+  * vue-requests v1.1.4
   * (c) 2018 Nick Ford
   * @license MIT
   */
@@ -2463,7 +2463,7 @@
 	  };
 	}();
 	function processHeaders(default_headers, passed_headers) {
-	  var headers = _Object$assign(default_headers, passed_headers);
+	  var headers = _Object$assign({}, default_headers, passed_headers);
 	  for (var key in headers) {
 	    if (typeof headers[key] === 'function') {
 	      headers[key] = headers[key]();
@@ -2489,15 +2489,15 @@
 	  var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
 	  var _options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 	  var _config = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-	  var options = _Object$assign(default_options, _options);
-	  var config = _Object$assign(defaults, _config);
+	  var options = _Object$assign({}, default_options, _options);
+	  var config = _Object$assign({}, defaults, _config);
 	  var body = options.body ? _JSON$stringify(options.body) : undefined;
 	  var method = options.method;
 	  var headers = processHeaders(config.headers, options.headers);
 	  if (!/^https?:\/\//i.test(url)) {
 	    url = config.root + url;
 	  }
-	  var race = _Promise.race([fetch(url, _Object$assign(options, { method: method }, { body: body }, { headers: headers })).then(function (response) {
+	  var race = _Promise.race([fetch(url, _Object$assign({}, options, { method: method }, { body: body }, { headers: headers })).then(function (response) {
 	    return processResponse(response, options);
 	  }), new _Promise(function (resolve, reject) {
 	    setTimeout(function () {
