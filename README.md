@@ -53,7 +53,6 @@ Before hook to fire before each request. The hook uses async/await, so asynchron
 Here's an example of a before hook checking for expired tokens and attempting to refresh before the original request:
 
 ```js
-// import moment from 'moment'
 import store from './store'
 
 const token = {
@@ -160,6 +159,9 @@ npm start
 
 # run tests with jest
 npm test
+
+# build dist version
+npm run build
 ```
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
