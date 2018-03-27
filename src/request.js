@@ -1,6 +1,5 @@
-
 import 'whatwg-fetch'
-import { mergeDeepRight } from 'ramda'
+// import { mergeDeepRight } from 'ramda'
 import { processResponse, processHeaders } from './utils'
 import defaults from './defaults'
 
@@ -10,16 +9,15 @@ const default_options = {
   headers: {}
 }
 
-// generic, unauthenticated XHR
-
 export default function Request(
   url = '',
   _options = {},
   _config = {}
 ) {
-  // const options = _merge({}, defaults(), _options)
-  const options = mergeDeepRight(default_options, _options)
-  const config = mergeDeepRight(defaults, _config)
+  // const options = mergeDeepRight(default_options, _options)
+  // const config = mergeDeepRight(defaults, _config)
+  const options = Object.assign(default_options, _options)
+  const config = Object.assign(defaults, _config)
   const body = options.body
     ? JSON.stringify(options.body)
     : undefined
@@ -31,11 +29,11 @@ export default function Request(
     url = config.root + url
   }
   const race = Promise.race([
-    fetch(url, {
-      method,
-      body,
-      headers
-    })
+    fetch(url, Object.assign(options,
+      { method },
+      { body },
+      { headers }
+    ))
     .then(response => {
       return processResponse(response, options)
     }),

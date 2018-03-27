@@ -18,7 +18,9 @@ export default (Vue, spyBefore, spyTimeout, Request) => {
 
     it('should get json', () => {
       expect.assertions(1)
-      return app.$request('/')
+      return app.$request('/', {
+        mode: 'no-cors'
+      })
         .then(response => {
           expect(response)
             .toEqual({
@@ -29,12 +31,17 @@ export default (Vue, spyBefore, spyTimeout, Request) => {
 
     it('should be passing the correct args', () => {
       expect(app.$request.mock.calls[0])
-        .toEqual(['/'])
+        .toEqual(['/', { mode: 'no-cors' }])
     })
 
     it('fetch should have received correct method GET', () => {
       expect(global.fetch.mock.calls[0][1].method)
         .toBe('GET')
+    })
+
+    it('fetch should have received other options', () => {
+      expect(global.fetch.mock.calls[0][1].mode)
+        .toBe('no-cors')
     })
 
     it('should fire the before hook', () => {
@@ -82,6 +89,11 @@ export default (Vue, spyBefore, spyTimeout, Request) => {
     it('fetch should receive correct header passed as function: two', () => {
       expect(global.fetch.mock.calls[1][1].headers.map.two)
         .toEqual(['test2'])
+    })
+
+    it('fetch should not receive header passed as undefined: two', () => {
+      expect('three' in global.fetch.mock.calls[1][1].headers.map)
+        .toBe(false)
     })
 
     fetch.mockResponseOnce(JSON.stringify({

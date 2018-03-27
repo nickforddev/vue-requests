@@ -1,7 +1,15 @@
-import { mergeDeepRight, pickBy } from 'ramda'
-
 function isDef (item) {
   return item !== undefined
+}
+
+function pickBy (test, obj) {
+  const output = {}
+  for (let key in obj) {
+    if (test(obj[key])) {
+      output[key] = obj[key]
+    }
+  }
+  return output
 }
 
 export function sleep (ms) {
@@ -54,7 +62,6 @@ export function validateArgs (options = {}) {
 
 export async function processResponse (response, options = {}) {
   const text = await response.text()
-
   try {
     const json = JSON.parse(text)
     if (!response.ok) {
@@ -70,7 +77,8 @@ export async function processResponse (response, options = {}) {
 }
 
 export function processHeaders (default_headers, passed_headers) {
-  let headers = mergeDeepRight(default_headers, passed_headers)
+  // let headers = mergeDeepRight(default_headers, passed_headers)
+  let headers = Object.assign(default_headers, passed_headers)
 
   for (let key in headers) {
     if (typeof headers[key] === 'function') {

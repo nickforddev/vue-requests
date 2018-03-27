@@ -16,7 +16,8 @@ Vue.use(VueRequests, {
     one: 'test1',
     two() {
       return 'test2'
-    }
+    },
+    three: undefined
   },
   before() {
     spyBefore(this)
