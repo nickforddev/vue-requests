@@ -16,8 +16,8 @@ export default function Request(
 ) {
   // const options = mergeDeepRight(default_options, _options)
   // const config = mergeDeepRight(defaults, _config)
-  const options = Object.assign(default_options, _options)
-  const config = Object.assign(defaults, _config)
+  const options = Object.assign({}, default_options, _options)
+  const config = Object.assign({}, defaults, _config)
   const body = options.body
     ? JSON.stringify(options.body)
     : undefined
@@ -29,7 +29,8 @@ export default function Request(
     url = config.root + url
   }
   const race = Promise.race([
-    fetch(url, Object.assign(options,
+    fetch(url, Object.assign({},
+      options,
       { method },
       { body },
       { headers }

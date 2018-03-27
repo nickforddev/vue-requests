@@ -78,7 +78,7 @@ export async function processResponse (response, options = {}) {
 
 export function processHeaders (default_headers, passed_headers) {
   // let headers = mergeDeepRight(default_headers, passed_headers)
-  let headers = Object.assign(default_headers, passed_headers)
+  let headers = Object.assign({}, default_headers, passed_headers)
 
   for (let key in headers) {
     if (typeof headers[key] === 'function') {
