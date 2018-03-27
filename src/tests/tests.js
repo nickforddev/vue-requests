@@ -128,6 +128,24 @@ export default (Vue, spyBefore, spyTimeout, Request) => {
       })
     })
 
+    fetch.mockResponseOnce(JSON.stringify({
+      'foo': 'bar'
+    }), {
+      status: 200
+    })
+
+    it('should not pass any headers if headers: false', () => {
+      expect.assertions(1)
+      return app.$request('test', {
+        headers: false
+      })
+      .then(() => {
+        expect(Object.keys(global.fetch.mock.calls[1][1].headers.map).length)
+          .toBe(0)
+      })
+      .catch(e => console.log)
+    })
+
     it('should timeout a request per timeout_duration', () => {
       global.fetch = async (...args) => {
         await sleep(2000)
