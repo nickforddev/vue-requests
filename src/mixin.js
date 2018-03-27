@@ -4,11 +4,6 @@ import { validateArgs } from './utils'
 import defaults from './defaults'
 
 const init = async (vm, _config) => {
-  // try {
-  //   validateArgs(_config)
-  // } catch (error) {
-  //   console.warn(error)
-  // }
   validateArgs(_config)
 
   const config = mergeDeepRight(
