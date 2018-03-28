@@ -6,6 +6,7 @@
     <button @click="test('put')">Put</button>
     <button @click="test('post')">Post</button>
     <button @click="test('delete')">Delete</button>
+    <button @click="postWithBody">Post with body</button>
     <button @click="getWithHeaders">Get with response headers</button>
     <pre>{{ display }}</pre>
   </div>
@@ -54,6 +55,17 @@ ${JSON.stringify(this.response, null, '  ')}`
         this.error = 'Cannot communicate with server'
         // console.warn(err)
       })
+    },
+    async postWithBody() {
+      const response = await this.$request('/', {
+        method: 'POST',
+        body: {
+          test: true
+        }
+      })
+      this.response = response
+      this.error = null
+      this.headers = null
     },
     getWithHeaders() {
       this.$request('/', {
