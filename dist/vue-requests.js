@@ -1,5 +1,5 @@
 /**
-  * vue-requests v1.1.5
+  * vue-requests v1.1.6
   * (c) 2018 Nick Ford
   * @license MIT
   */
@@ -2385,41 +2385,33 @@
 	}
 	function validateArgs() {
 	  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-	  var functions = {
-	    before: options.before,
-	    timeout: options.timeout
-	  };
-	  var strings = {
-	    root: options.root
-	  };
-	  var objects = {
-	    headers: options.headers
-	  };
-	  var numbers = {
-	    timeout_duration: options.timeout_duration
-	  };
-	  for (var key in functions) {
-	    var type = _typeof(functions[key]);
-	    if (isDef(functions[key]) && type !== 'function') {
-	      throw new TypeError('Expected parameter "' + key + '" to be a function, received ' + type);
+	  var before = options.before,
+	      timeout = options.timeout,
+	      root = options.root,
+	      headers = options.headers,
+	      timeout_duration = options.timeout_duration;
+	  var params = {
+	    string: {
+	      root: root
+	    },
+	    number: {
+	      timeout_duration: timeout_duration
+	    },
+	    function: {
+	      before: before,
+	      timeout: timeout
+	    },
+	    object: {
+	      headers: headers
 	    }
-	  }
-	  for (var _key in strings) {
-	    var _type = _typeof(strings[_key]);
-	    if (isDef(strings[_key]) && _type !== 'string') {
-	      throw new TypeError('Expected parameter "' + _key + '" to be a string, received ' + _type);
-	    }
-	  }
-	  for (var _key2 in objects) {
-	    var _type2 = _typeof(objects[_key2]);
-	    if (isDef(objects[_key2]) && _type2 !== 'object') {
-	      throw new TypeError('Expected parameter "' + _key2 + '" to be an object, received ' + _type2);
-	    }
-	  }
-	  for (var _key3 in numbers) {
-	    var _type3 = _typeof(numbers[_key3]);
-	    if (isDef(numbers[_key3]) && _type3 !== 'number') {
-	      throw new TypeError('Expected parameter "' + _key3 + '" to be an number, received ' + _type3);
+	  };
+	  for (var type_key in params) {
+	    for (var key in params[type_key]) {
+	      var param_value = params[type_key][key];
+	      var type = typeof param_value === 'undefined' ? 'undefined' : _typeof(param_value);
+	      if (isDef(param_value) && type !== type_key) {
+	        throw new TypeError('Expected parameter "' + key + '" to be of type "' + type_key + '", received "' + type + '"');
+	      }
 	    }
 	  }
 	}
@@ -2473,7 +2465,7 @@
 	  return new Headers(headers);
 	}
 
-	var defaults = {
+	var default_config = {
 	  timeout_duration: 20000,
 	  timeout: false,
 	  headers: {},
@@ -2483,21 +2475,27 @@
 	var default_options = {
 	  method: 'GET',
 	  body: undefined,
-	  headers: {}
+	  headers: {
+	    'Content-Type': 'application/json'
+	  }
 	};
 	function Request() {
 	  var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
 	  var _options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 	  var _config = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 	  var options = _Object$assign({}, default_options, _options);
-	  var config = _Object$assign({}, defaults, _config);
-	  var body = options.body ? _JSON$stringify(options.body) : undefined;
+	  var config = _Object$assign({}, default_config, _config);
+	  var body = options.body && _JSON$stringify(options.body);
 	  var method = options.method;
 	  var headers = processHeaders(config.headers, options.headers);
 	  if (!/^https?:\/\//i.test(url)) {
 	    url = config.root + url;
 	  }
-	  var race = _Promise.race([fetch(url, _Object$assign({}, options, { method: method }, { body: body }, { headers: headers })).then(function (response) {
+	  var race = _Promise.race([fetch(url, _Object$assign({}, options, {
+	    method: method,
+	    body: body,
+	    headers: headers
+	  })).then(function (response) {
 	    return processResponse(response, options);
 	  }), new _Promise(function (resolve, reject) {
 	    setTimeout(function () {
@@ -2523,7 +2521,7 @@
 	        switch (_context2.prev = _context2.next) {
 	          case 0:
 	            validateArgs(_config);
-	            config = _Object$assign({ vm: vm }, defaults, _config);
+	            config = _Object$assign({ vm: vm }, default_config, _config);
 	            vm.$request = function () {
 	              var _ref2 = _asyncToGenerator(              regenerator.mark(function _callee(url, options) {
 	                var fire_hooks = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
