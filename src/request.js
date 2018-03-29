@@ -5,7 +5,9 @@ import default_config from './defaults'
 const default_options = {
   method: 'GET',
   body: undefined,
-  headers: {}
+  headers: {
+    'Content-Type': 'application/json'
+  }
 }
 
 export default function Request(

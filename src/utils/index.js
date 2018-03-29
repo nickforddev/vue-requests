@@ -1,8 +1,8 @@
-function isDef (item) {
+export function isDef (item) {
   return item !== undefined
 }
 
-function pickBy (test, obj) {
+export function pickBy (test, obj) {
   const output = {}
   for (let key in obj) {
     if (test(obj[key])) {

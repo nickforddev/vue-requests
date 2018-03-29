@@ -5,6 +5,7 @@ const { port } = require('./config')
 
 const app = express()
 
+app.use(express.json())
 app.use(cors())
 
 app.get('/', (req, res) => {
@@ -17,14 +18,16 @@ app.get('/', (req, res) => {
 app.post('/', (req, res) => {
   console.log('Received POST')
   res.send({
-    message: 'Received POST'
+    message: 'Received POST',
+    body: req.body
   })
 })
 
 app.put('/', (req, res) => {
   console.log('Received PUT')
   res.send({
-    message: 'Received PUT'
+    message: 'Received PUT',
+    body: req.body
   })
 })
 

@@ -6,6 +6,7 @@
     <button @click="test('put')">Put</button>
     <button @click="test('post')">Post</button>
     <button @click="test('delete')">Delete</button>
+    <button @click="putWithBody">Put with body</button>
     <button @click="postWithBody">Post with body</button>
     <button @click="getWithHeaders">Get with response headers</button>
     <pre>{{ display }}</pre>
@@ -14,6 +15,7 @@
 
 <script>
 const { port } = require('./config')
+const utils = require('../utils')
 
 export default {
   name: 'app',
@@ -31,12 +33,9 @@ export default {
         ? this.error
         : this.response
           ? this.headers
-            ? `From server:
-
-${JSON.stringify(this.headers, null, '  ')}`
-            : `From server:
-
-${JSON.stringify(this.response, null, '  ')}`
+            ? `From server:\n\nheaders: ${JSON.stringify(this.headers, null, 2)}\n\n` +
+              `body: ${JSON.stringify(this.response, null, 2)}`
+            : `From server:\n\n${JSON.stringify(this.response, null, 2)}`
           : 'Click a button to send request'
     }
   },
@@ -46,7 +45,7 @@ ${JSON.stringify(this.response, null, '  ')}`
         method
       })
       .then(response => {
-        this.response = response
+        this.response = this.pick(response)
         this.error = null
         this.headers = null
       })
@@ -61,7 +60,18 @@ ${JSON.stringify(this.response, null, '  ')}`
           test: true
         }
       })
-      this.response = response
+      this.response = this.pick(response)
+      this.error = null
+      this.headers = null
+    },
+    async putWithBody() {
+      const response = await this.$request('/', {
+        method: 'PUT',
+        body: {
+          test: 1234
+        }
+      })
+      this.response = this.pick(response)
       this.error = null
       this.headers = null
     },
@@ -72,8 +82,14 @@ ${JSON.stringify(this.response, null, '  ')}`
       .then(response => {
         this.response = response.body
         this.headers = Array.from(response.headers)
-        console.log(response.headers)
       })
+    },
+    pick(response) {
+      return utils.pickBy((item) => {
+        return typeof item === 'object'
+          ? Object.keys(item).length
+          : true
+      }, response)
     }
   }
 }
