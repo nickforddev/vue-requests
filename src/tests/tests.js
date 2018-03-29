@@ -131,7 +131,7 @@ export default (Vue, spyBefore, spyTimeout, Request) => {
       await app.$request('test', {
         headers: false
       })
-      expect(Object.keys(global.fetch.mock.calls[current][1].headers.map).length)
+      expect(Object.keys(global.fetch.mock.calls[current + 1][1].headers.map).length)
         .toBe(0)
     })
 
@@ -142,7 +142,7 @@ export default (Vue, spyBefore, spyTimeout, Request) => {
     })
 
     it('should not pass any body if body is not provided', async () => {
-      app.$request('test', {
+      await app.$request('test', {
         method: 'post'
       })
       expect(global.fetch.mock.calls[current][1].body)
