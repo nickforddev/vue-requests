@@ -20,7 +20,9 @@ This plugin is a small Vue.js wrapper for the fetch api, with some improvements 
 ## Installation
 
 ``` bash
-npm install vue-requests
+# install using npm
+npm install --save vue-requests
+
 # or using yarn
 yarn add vue-requests
 ```
