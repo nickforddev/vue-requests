@@ -49,11 +49,9 @@ ${JSON.stringify(this.response, null, '  ')}`
         this.response = response
         this.error = null
         this.headers = null
-        // alert(`Server responded correctly: ${response.message}`)
       })
       .catch(() => {
         this.error = 'Cannot communicate with server'
-        // console.warn(err)
       })
     },
     async postWithBody() {
@@ -86,12 +84,10 @@ ${JSON.stringify(this.response, null, '  ')}`
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* text-align: center; */
   color: #2c3e50;
   padding: 0 30px;
   width: 500px;
   max-width: 100%;
-  /* margin-top: 60px; */
 }
 
 pre {

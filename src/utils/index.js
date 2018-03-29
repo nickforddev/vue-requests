@@ -17,45 +17,39 @@ export function sleep (ms) {
 }
 
 export function validateArgs (options = {}) {
-  const functions = {
-    before: options.before,
-    timeout: options.timeout
-  }
-  const strings = {
-    root: options.root
-  }
-  const objects = {
-    headers: options.headers
-  }
-  const numbers = {
-    timeout_duration: options.timeout_duration
-  }
+  const {
+    before,
+    timeout,
+    root,
+    headers,
+    timeout_duration
+  } = options
 
-  for (let key in functions) {
-    const type = typeof functions[key]
-    if (isDef(functions[key]) && type !== 'function') {
-      throw new TypeError(`Expected parameter "${key}" to be a function, received ${type}`)
+  const params = {
+    string: {
+      root
+    },
+    number: {
+      timeout_duration
+    },
+    function: {
+      before,
+      timeout
+    },
+    object: {
+      headers
     }
   }
 
-  for (let key in strings) {
-    const type = typeof strings[key]
-    if (isDef(strings[key]) && type !== 'string') {
-      throw new TypeError(`Expected parameter "${key}" to be a string, received ${type}`)
-    }
-  }
-
-  for (let key in objects) {
-    const type = typeof objects[key]
-    if (isDef(objects[key]) && type !== 'object') {
-      throw new TypeError(`Expected parameter "${key}" to be an object, received ${type}`)
-    }
-  }
-
-  for (let key in numbers) {
-    const type = typeof numbers[key]
-    if (isDef(numbers[key]) && type !== 'number') {
-      throw new TypeError(`Expected parameter "${key}" to be an number, received ${type}`)
+  for (let type_key in params) {
+    for (let key in params[type_key]) {
+      const param_value = params[type_key][key]
+      const type = typeof param_value
+      if (isDef(param_value) && type !== type_key) {
+        throw new TypeError(
+          `Expected parameter "${key}" to be of type "${type_key}", received "${type}"`
+        )
+      }
     }
   }
 }
@@ -77,7 +71,6 @@ export async function processResponse (response, options = {}) {
 }
 
 export function processHeaders (default_headers, passed_headers) {
-  // let headers = mergeDeepRight(default_headers, passed_headers)
   let headers = passed_headers === false
     ? {}
     : Object.assign({}, default_headers, passed_headers)

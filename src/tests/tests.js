@@ -2,10 +2,10 @@ import { sleep, validateArgs } from '../utils'
 
 export default (Vue, spyBefore, spyTimeout, Request) => {
   const app = new Vue()
-
-  // spy on app.$request
+  let current = -1
   const request = app.$request
   app.$request = jest.fn((...args) => {
+    current++
     return request(...args)
   })
 
@@ -16,31 +16,28 @@ export default (Vue, spyBefore, spyTimeout, Request) => {
       status: 200
     })
 
-    it('should get json', () => {
-      expect.assertions(1)
-      return app.$request('/', {
+    it('should receive json from get request', async () => {
+      const response = await app.$request('/', {
         mode: 'no-cors'
       })
-        .then(response => {
-          expect(response)
-            .toEqual({
-              foo: 'bar'
-            })
+      expect(response)
+        .toEqual({
+          foo: 'bar'
         })
     })
 
     it('should be passing the correct args', () => {
-      expect(app.$request.mock.calls[0])
+      expect(app.$request.mock.calls[current])
         .toEqual(['/', { mode: 'no-cors' }])
     })
 
     it('fetch should have received correct method GET', () => {
-      expect(global.fetch.mock.calls[0][1].method)
+      expect(global.fetch.mock.calls[current][1].method)
         .toBe('GET')
     })
 
     it('fetch should have received other options', () => {
-      expect(global.fetch.mock.calls[0][1].mode)
+      expect(global.fetch.mock.calls[current][1].mode)
         .toBe('no-cors')
     })
 
@@ -50,7 +47,7 @@ export default (Vue, spyBefore, spyTimeout, Request) => {
     })
 
     it('the before hook should have the vue instance applied', () => {
-      expect(spyBefore.mock.calls[0][0])
+      expect(spyBefore.mock.calls[current][0])
         .toBeInstanceOf(Vue)
     })
 
@@ -60,39 +57,36 @@ export default (Vue, spyBefore, spyTimeout, Request) => {
       status: 200
     })
 
-    it('fetch should receive correct method POST', () => {
-      expect.assertions(1)
-      return app.$request('/', {
+    it('fetch should receive correct method POST', async () => {
+      await app.$request('/', {
         method: 'POST',
         body: {
           test: true
         }
       })
-        .then(() => {
-          expect(global.fetch.mock.calls[1][1].method)
-            .toBe('POST')
-        })
+      expect(global.fetch.mock.calls[current][1].method)
+        .toBe('POST')
     })
 
-    it('fetch should receive correct body', () => {
-      expect(global.fetch.mock.calls[1][1].body)
+    it('fetch should receive correct request body', () => {
+      expect(global.fetch.mock.calls[current][1].body)
         .toEqual(JSON.stringify({
           test: true
         }))
     })
 
     it('fetch should receive correct header passed as property: one', () => {
-      expect(global.fetch.mock.calls[1][1].headers.map.one)
+      expect(global.fetch.mock.calls[current][1].headers.map.one)
         .toEqual(['test1'])
     })
 
     it('fetch should receive correct header passed as function: two', () => {
-      expect(global.fetch.mock.calls[1][1].headers.map.two)
+      expect(global.fetch.mock.calls[current][1].headers.map.two)
         .toEqual(['test2'])
     })
 
     it('fetch should not receive header passed as undefined: two', () => {
-      expect('three' in global.fetch.mock.calls[1][1].headers.map)
+      expect('three' in global.fetch.mock.calls[current][1].headers.map)
         .toBe(false)
     })
 
@@ -102,13 +96,13 @@ export default (Vue, spyBefore, spyTimeout, Request) => {
       status: 500
     })
 
-    it('should throw for a failed fetch', () => {
-      expect.assertions(1)
-      return app.$request('/')
-        .catch(error => {
-          expect(error)
-            .toBeInstanceOf(Object)
-        })
+    it('should throw for a failed fetch', async () => {
+      try {
+        await app.$request('/')
+      } catch (error) {
+        expect(error)
+          .toBeInstanceOf(Object)
+      }
     })
 
     fetch.mockResponseOnce(JSON.stringify({
@@ -119,7 +113,6 @@ export default (Vue, spyBefore, spyTimeout, Request) => {
 
     describe('Request function', () => {
       it('should be able to fetch as a standalone function', async () => {
-        expect.assertions(1)
         const response = await Request('test')
         expect(response)
           .toEqual({
@@ -134,16 +127,26 @@ export default (Vue, spyBefore, spyTimeout, Request) => {
       status: 200
     })
 
-    it('should not pass any headers if headers: false', () => {
-      expect.assertions(1)
-      return app.$request('test', {
+    it('should not pass any headers if headers: false', async () => {
+      await app.$request('test', {
         headers: false
       })
-      .then(() => {
-        expect(Object.keys(global.fetch.mock.calls[1][1].headers.map).length)
-          .toBe(0)
+      expect(Object.keys(global.fetch.mock.calls[current][1].headers.map).length)
+        .toBe(0)
+    })
+
+    fetch.mockResponseOnce(JSON.stringify({
+      'foo': 'bar'
+    }), {
+      status: 200
+    })
+
+    it('should not pass any body if body is not provided', async () => {
+      app.$request('test', {
+        method: 'post'
       })
-      .catch(e => console.log)
+      expect(global.fetch.mock.calls[current][1].body)
+        .toBe(undefined)
     })
 
     it('should timeout a request per timeout_duration', () => {
@@ -175,7 +178,28 @@ export default (Vue, spyBefore, spyTimeout, Request) => {
           root: 2344
         })
       })
-      .toThrow('Expected parameter "root" to be a string, received number')
+      .toThrow('Expected parameter "root" to be of type "string", received "number"')
+
+      expect(() => {
+        validateArgs({
+          before: null
+        })
+      })
+      .toThrow('Expected parameter "before" to be of type "function", received "object"')
+
+      expect(() => {
+        validateArgs({
+          timeout: 'test'
+        })
+      })
+      .toThrow('Expected parameter "timeout" to be of type "function", received "string"')
+
+      expect(() => {
+        validateArgs({
+          timeout_duration: null
+        })
+      })
+      .toThrow('Expected parameter "timeout_duration" to be of type "number", received "object"')
     })
   })
 }
